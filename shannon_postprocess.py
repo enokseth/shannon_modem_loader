@@ -23,6 +23,8 @@ import time
 import os
 import pwd
 import glob
+import threading
+import time
 
 import shannon_pal_reconstructor
 import shannon_generic
@@ -364,7 +366,6 @@ waitbox_hook.hook()
 
 
 # Optionnel : ajoute une sécurité supplémentaire avec timeout automatique
-import threading, time
 
 def force_hide_after_timeout(timeout=120):
     time.sleep(timeout)
