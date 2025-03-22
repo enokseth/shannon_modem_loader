@@ -340,6 +340,22 @@ idb_hooks = idb_finalize_hooks_t()
 idb_hooks.hook()
 idc.msg("[i] Shannon postprocessor scheduled.\n")
 
-#show a "please wait .." box
-if (not shannon_generic.is_debug):
+# Affiche la fenêtre "please wait..." uniquement si le mode debug n'est pas activé
+if not shannon_generic.is_debug:
     idaapi.show_wait_box('HIDECANCEL\nPost-processing modem image, please wait...')
+
+# Cette partie s'assure que la fenêtre est bien fermée à la fin du hook
+def safe_hide_wait_box():
+    try:
+        idaapi.hide_wait_box()
+    except Exception as e:
+        idc.msg(f"[!] Error closing wait box: {e}\n")
+
+# Ajoute un hook pour s’assurer qu’elle se ferme quoi qu’il arrive
+class WaitBoxCloser(ida_idp.IDB_Hooks):
+    def auto_empty_finally(self):
+        safe_hide_wait_box()
+
+# Hook secondaire au cas où le postprocess manquerait la fermeture
+waitbox_hook = WaitBoxCloser()
+waitbox_hook.hook()
