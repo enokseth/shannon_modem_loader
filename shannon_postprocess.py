@@ -342,6 +342,8 @@ idb_hooks = idb_finalize_hooks_t()
 idb_hooks.hook()
 idc.msg("[i] Shannon postprocessor scheduled.\n")
 
+## ADDED BY ENOKSETH FOR AVOIDING WAIT BOXES AND CRASH 
+
 # Affiche la fenêtre "please wait..." uniquement si le mode debug n'est pas activé
 if not shannon_generic.is_debug:
     idaapi.show_wait_box('HIDECANCEL\nPost-processing modem image, please wait...')
